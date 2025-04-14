@@ -195,6 +195,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
 
+<!-- Adicione este código ANTES do fechamento do </body> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
+
 <script>
 // Adiciona o botão de ajuda dinamicamente
 const helpButton = document.createElement('div');
@@ -331,9 +335,15 @@ function iniciarTutorial() {
 // Inicia o tutorial na primeira visita
 if (!localStorage.getItem('tutorialHistoricoVisto')) {
   setTimeout(() => {
-    iniciarTutorial();
+    // Verifica se os elementos já foram carregados
+    if (document.querySelector('.btn-small.blue')) {
+      iniciarTutorial();
+    } else {
+      // Se não, espera mais um pouco
+      setTimeout(iniciarTutorial, 1000);
+    }
     localStorage.setItem('tutorialHistoricoVisto', 'true');
-  }, 1500);
+  }, 1000);
 }
 
 // Configura o botão de ajuda
@@ -341,10 +351,18 @@ document.getElementById('helpButton').addEventListener('click', iniciarTutorial)
 
 // Monitora mudanças na tabela para atualizar os elementos do tutorial
 const observer = new MutationObserver(() => {
-  if (document.querySelector('.btn-small.blue') {
+  if (document.querySelector('.btn-small.blue') && !document.querySelector('[data-tutorial-init]')) {
+    // Marca que o tutorial foi inicializado
+    document.querySelector('body').setAttribute('data-tutorial-init', 'true');
+    
     // Atualiza os passos do tutorial que dependem desses elementos
     tutorialSteps[6].element = document.querySelector('.btn-small.blue');
     tutorialSteps[7].element = document.querySelector('.btn-small.green');
+    
+    // Se for a primeira visita e o tutorial ainda não apareceu
+    if (!localStorage.getItem('tutorialHistoricoVisto')) {
+      iniciarTutorial();
+    }
   }
 });
 
@@ -357,8 +375,8 @@ observer.observe(document.getElementById('tabelaHistorico'), {
 document.addEventListener('DOMContentLoaded', function() {
   const modals = document.querySelectorAll('.modal');
   modals.forEach(modal => {
-    modal.addEventListener('modalOpen', function() {
-      if (modal.id === 'modalCompartilhar' && !localStorage.getItem('tutorialCompartilharVisto')) {
+    modal.addEventListener('click', function() {
+      if (this.id === 'modalCompartilhar' && !localStorage.getItem('tutorialCompartilharVisto')) {
         setTimeout(() => {
           introJs().setOptions({
             steps: [tutorialSteps[8]],
@@ -374,6 +392,8 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
+
     <script>
         // Configuração do Firebase
         const firebaseConfig = {
