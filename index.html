@@ -191,6 +191,189 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <!-- Adicione este código ANTES do fechamento do </body> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
+
+<script>
+// Adiciona o botão de ajuda dinamicamente
+const helpButton = document.createElement('div');
+helpButton.id = 'helpButton';
+helpButton.className = 'help-button';
+helpButton.innerHTML = '<i class="material-icons">help_outline</i>';
+document.body.appendChild(helpButton);
+
+// Estilos para o tutorial
+const style = document.createElement('style');
+style.textContent = `
+  .help-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    background-color: #1565c0;
+    color: white;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .help-button:hover {
+    background-color: #0d47a1;
+    transform: scale(1.1);
+  }
+  
+  .introjs-tooltip {
+    max-width: 400px;
+    border-radius: 8px;
+  }
+  
+  .introjs-button {
+    color: white !important;
+    text-shadow: none !important;
+    background-color: #1565c0 !important;
+    border: none !important;
+    border-radius: 4px !important;
+  }
+  
+  .introjs-button:hover {
+    background-color: #0d47a1 !important;
+  }
+  
+  .introjs-skipbutton {
+    color: #757575 !important;
+  }
+  
+  .introjs-bullets ul li a {
+    background-color: #bbdefb !important;
+  }
+  
+  .introjs-bullets ul li a.active {
+    background-color: #1565c0 !important;
+  }
+  
+  .introjs-helperNumberLayer {
+    background: #0d47a1 !important;
+  }
+`;
+document.head.appendChild(style);
+
+// Configura os passos do tutorial
+const tutorialSteps = [
+  {
+    element: document.querySelector('.container .section'),
+    intro: 'Bem-vindo ao histórico de encomendas do condomínio!<br><br>Aqui você pode visualizar todas as encomendas registradas.',
+    position: 'bottom'
+  },
+  {
+    element: document.querySelector('.card-content .row:first-child'),
+    intro: 'Nesta seção você encontra as opções para exportar todo o histórico em PDF ou limpar os registros.',
+    position: 'bottom'
+  },
+  {
+    element: document.querySelector('#btnExportarHistorico'),
+    intro: 'Clique aqui para gerar um PDF com todo o histórico de encomendas.',
+    position: 'bottom'
+  },
+  {
+    element: document.querySelector('#modalLimparHistorico'),
+    intro: 'Esta opção permite limpar todo o histórico de encomendas. Use com cuidado!',
+    position: 'left'
+  },
+  {
+    element: document.querySelector('.search-container'),
+    intro: 'Filtre as encomendas por bloco e/ou apartamento para encontrar registros específicos.',
+    position: 'bottom'
+  },
+  {
+    element: document.querySelector('table thead'),
+    intro: 'A tabela mostra todos os detalhes das encomendas, ordenadas pela mais recente.',
+    position: 'bottom'
+  },
+  {
+    element: document.querySelector('.btn-small.blue'),
+    intro: 'Compartilhe os detalhes de uma encomenda via WhatsApp, Telegram, e-mail ou outros apps.',
+    position: 'top'
+  },
+  {
+    element: document.querySelector('.btn-small.green'),
+    intro: 'Exporte os detalhes de uma encomenda específica para PDF.',
+    position: 'top'
+  },
+  {
+    element: document.querySelector('#modalCompartilhar'),
+    intro: 'Escolha como deseja compartilhar os detalhes da encomenda selecionada.',
+    position: 'left'
+  }
+];
+
+// Função para iniciar o tutorial
+function iniciarTutorial() {
+  introJs().setOptions({
+    steps: tutorialSteps,
+    nextLabel: 'Próximo',
+    prevLabel: 'Anterior',
+    skipLabel: 'Pular',
+    doneLabel: 'Concluir',
+    showProgress: true,
+    showBullets: true,
+    exitOnOverlayClick: false,
+    disableInteraction: false
+  }).start();
+}
+
+// Inicia o tutorial na primeira visita
+if (!localStorage.getItem('tutorialHistoricoVisto')) {
+  setTimeout(() => {
+    iniciarTutorial();
+    localStorage.setItem('tutorialHistoricoVisto', 'true');
+  }, 1500);
+}
+
+// Configura o botão de ajuda
+document.getElementById('helpButton').addEventListener('click', iniciarTutorial);
+
+// Monitora mudanças na tabela para atualizar os elementos do tutorial
+const observer = new MutationObserver(() => {
+  if (document.querySelector('.btn-small.blue') {
+    // Atualiza os passos do tutorial que dependem desses elementos
+    tutorialSteps[6].element = document.querySelector('.btn-small.blue');
+    tutorialSteps[7].element = document.querySelector('.btn-small.green');
+  }
+});
+
+observer.observe(document.getElementById('tabelaHistorico'), {
+  childList: true,
+  subtree: true
+});
+
+// Monitora abertura de modais para mostrar dicas contextuais
+document.addEventListener('DOMContentLoaded', function() {
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    modal.addEventListener('modalOpen', function() {
+      if (modal.id === 'modalCompartilhar' && !localStorage.getItem('tutorialCompartilharVisto')) {
+        setTimeout(() => {
+          introJs().setOptions({
+            steps: [tutorialSteps[8]],
+            showBullets: false,
+            showButtons: true,
+            showProgress: false,
+            doneLabel: 'Entendi'
+          }).start();
+          localStorage.setItem('tutorialCompartilharVisto', 'true');
+        }, 500);
+      }
+    });
+  });
+});
+</script>
     <script>
         // Configuração do Firebase
         const firebaseConfig = {
