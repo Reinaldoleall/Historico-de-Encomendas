@@ -144,16 +144,17 @@
     </main>
 
     <!-- Modal de Confirmação para Limpar Histórico -->
-    <div id="modalLimparHistorico" class="modal">
-        <div class="modal-content">
-            <h4>Confirmar Exclusão</h4>
-            <p>Tem certeza que deseja limpar todo o histórico de encomendas? Esta ação não pode ser desfeita.</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a href="#!" class="waves-effect waves-light btn red darken-1" id="btnConfirmarLimparHistorico">Limpar</a>
-        </div>
+<!-- Modal de Confirmação para Limpar Histórico -->
+<div id="modalLimparHistorico" class="modal">
+    <div class="modal-content">
+        <h4>Confirmar Exclusão</h4>
+        <p>Tem certeza que deseja remover todas as encomendas já entregues/finalizadas? Esta ação não pode ser desfeita.</p>
     </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" class="waves-effect waves-light btn red darken-1" id="btnConfirmarLimparHistorico">Limpar</a>
+    </div>
+</div>
 
     <!-- Modal de Compartilhamento -->
     <div id="modalCompartilhar" class="modal share-modal">
@@ -184,6 +185,7 @@
             <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
         </div>
     </div>
+    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -192,10 +194,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <!-- Adicione este código ANTES do fechamento do </body> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
-
-<!-- Adicione este código ANTES do fechamento do </body> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/intro.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/6.0.0/introjs.min.css" rel="stylesheet">
 
@@ -271,48 +269,48 @@ document.head.appendChild(style);
 // Configura os passos do tutorial
 const tutorialSteps = [
   {
-    element: document.querySelector('.container .section'),
-    intro: 'Bem-vindo ao histórico de encomendas do condomínio!<br><br>Aqui você pode visualizar todas as encomendas registradas.',
+    element: document.querySelector('.card'),
+    intro: '<h4>Bem-vindo ao Histórico de Encomendas</h4><p>Aqui você pode visualizar todas as encomendas registradas no sistema, tanto pendentes quanto já retiradas.</p>',
     position: 'bottom'
   },
   {
     element: document.querySelector('.card-content .row:first-child'),
-    intro: 'Nesta seção você encontra as opções para exportar todo o histórico em PDF ou limpar os registros.',
+    intro: '<h4>Controles Principais</h4><p>Nesta seção você encontra:</p><ul><li>Exportar todo o histórico em PDF</li><li>Limpar registros antigos</li></ul>',
     position: 'bottom'
   },
   {
     element: document.querySelector('#btnExportarHistorico'),
-    intro: 'Clique aqui para gerar um PDF com todo o histórico de encomendas.',
+    intro: '<h4>Exportar Tudo</h4><p>Clique aqui para gerar um PDF com todo o histórico de encomendas.</p>',
     position: 'bottom'
   },
   {
     element: document.querySelector('#modalLimparHistorico'),
-    intro: 'Esta opção permite limpar todo o histórico de encomendas. Use com cuidado!',
+    intro: '<h4>Limpar Histórico</h4><p>Esta opção remove permanentemente as encomendas já retiradas. Use com cuidado!</p>',
     position: 'left'
   },
   {
     element: document.querySelector('.search-container'),
-    intro: 'Filtre as encomendas por bloco e/ou apartamento para encontrar registros específicos.',
+    intro: '<h4>Filtrar Encomendas</h4><p>Pesquise encomendas específicas por:</p><ul><li>Bloco</li><li>Número do apartamento</li></ul>',
     position: 'bottom'
   },
   {
     element: document.querySelector('table thead'),
-    intro: 'A tabela mostra todos os detalhes das encomendas, ordenadas pela mais recente.',
+    intro: '<h4>Tabela de Encomendas</h4><p>Aqui estão todas as encomendas ordenadas da mais recente para a mais antiga.</p>',
     position: 'bottom'
   },
   {
     element: document.querySelector('.btn-small.blue'),
-    intro: 'Compartilhe os detalhes de uma encomenda via WhatsApp, Telegram, e-mail ou outros apps.',
+    intro: '<h4>Compartilhar</h4><p>Clique neste ícone para compartilhar os detalhes de uma encomenda via WhatsApp, Telegram, e-mail ou outros apps.</p>',
     position: 'top'
   },
   {
     element: document.querySelector('.btn-small.green'),
-    intro: 'Exporte os detalhes de uma encomenda específica para PDF.',
+    intro: '<h4>Exportar Item</h4><p>Gere um PDF com os detalhes de uma encomenda específica.</p>',
     position: 'top'
   },
   {
     element: document.querySelector('#modalCompartilhar'),
-    intro: 'Escolha como deseja compartilhar os detalhes da encomenda selecionada.',
+    intro: '<h4>Opções de Compartilhamento</h4><p>Escolha como deseja compartilhar os detalhes da encomenda selecionada.</p>',
     position: 'left'
   }
 ];
@@ -328,7 +326,8 @@ function iniciarTutorial() {
     showProgress: true,
     showBullets: true,
     exitOnOverlayClick: false,
-    disableInteraction: false
+    disableInteraction: false,
+    tooltipClass: 'custom-tooltip'
   }).start();
 }
 
@@ -392,8 +391,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
-
-
     <script>
         // Configuração do Firebase
         const firebaseConfig = {
@@ -546,23 +543,43 @@ document.addEventListener('DOMContentLoaded', function() {
             atualizarTabela(historicoCompleto);
         }
         
-        async function limparHistoricoCompleto() {
-            try {
-                // Limpa apenas o histórico (não as encomendas ativas)
-                await database.ref('historico').remove();
-                M.toast({html: 'Histórico limpo com sucesso', classes: 'green'});
-                
-                // Recarrega os dados (mas mantém as encomendas ativas)
-                carregarHistorico();
-                
-                const modal = M.Modal.getInstance(document.getElementById('modalLimparHistorico'));
-                modal.close();
-                
-            } catch (error) {
-                console.error('Erro ao limpar histórico:', error);
-                M.toast({html: 'Erro ao limpar histórico', classes: 'red'});
-            }
+async function limparHistoricoCompleto() {
+    try {
+        // Primeiro, obtemos todas as encomendas
+        const snapshot = await database.ref('encomendas').once('value');
+        
+        if (!snapshot.exists()) {
+            M.toast({html: 'Nenhuma encomenda encontrada', classes: 'green'});
+            return;
         }
+        
+        // Criamos um array de promessas para deletar as encomendas finalizadas
+        const promises = [];
+        
+        snapshot.forEach(child => {
+            const encomenda = child.val();
+            // Verifica se o status é "entregue" ou "finalizada" (ou qualquer status que você considerar como finalizado)
+            if (encomenda.status === 'retirado' || encomenda.status === 'entregue' || encomenda.status === 'finalizada') {
+                promises.push(database.ref('encomendas/' + child.key).remove());
+            }
+        });
+        
+        // Executa todas as promessas
+        await Promise.all(promises);
+        
+        M.toast({html: 'Encomendas finalizadas removidas com sucesso', classes: 'green'});
+        
+        // Recarrega os dados
+        carregarHistorico();
+        
+        const modal = M.Modal.getInstance(document.getElementById('modalLimparHistorico'));
+        modal.close();
+        
+    } catch (error) {
+        console.error('Erro ao limpar encomendas finalizadas:', error);
+        M.toast({html: 'Erro ao limpar encomendas finalizadas', classes: 'red'});
+    }
+}
         
         function compartilharEncomenda(id) {
             encomendaAtual = historicoCompleto.find(item => item.id === id);
@@ -823,4 +840,4 @@ function sharePDF(filePath) {
 }
     </script>
 </body>
-  </html>
+</html>
